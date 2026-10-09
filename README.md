@@ -73,3 +73,22 @@ Until a domain is verified, Resend only delivers to your own account email, whic
 and `TWILIO_FROM_NUMBER` (or `TWILIO_MESSAGING_SERVICE_SID`). In the US, carriers require business texting numbers
 to be registered (A2P 10DLC) before messages are reliably delivered. Registration is done in the Twilio console and
 can take days to be approved, so expect failures or blocks until then. Only text customers who agreed to it.
+
+## Keeping the free Supabase project awake
+
+Supabase pauses free projects that have little database activity for a week. Once deployed on Vercel, the app
+calls `/api/keepalive` once a day (see `vercel.json`), which runs a few small queries. To turn it on:
+
+1. Make up a long random string and add it as `CRON_SECRET` in Vercel (Project Settings > Environment Variables).
+2. Redeploy. Vercel registers the schedule and sends the secret automatically. Check Settings > Cron Jobs.
+3. To test, open the Cron Jobs page in Vercel and run it, or check the function logs the next day.
+
+Vercel only runs cron jobs on production deployments, and on its free plan it picks a moment within the scheduled hour.
+It does nothing while you are only running the app on your own computer.
+
+Optional backup: `.github/workflows/keepalive.yml` pings the database from GitHub every day, independent of Vercel. Add
+`SUPABASE_URL` and `SUPABASE_ANON_KEY` as repository secrets to switch it on. Keep the repository private; GitHub turns
+off scheduled workflows in public repositories that go quiet for 60 days.
+
+If a project does get paused, you can resume it from the Supabase dashboard. Your data is kept. The free plan does not
+include automatic backups, so export your data now and then or move to a paid plan when the business depends on it.

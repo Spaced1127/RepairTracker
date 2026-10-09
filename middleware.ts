@@ -17,8 +17,8 @@ export async function middleware(request: NextRequest) {
   const { data: { user } } = await supabase.auth.getUser();
   const path = request.nextUrl.pathname;
   const onLogin = path.startsWith("/login");
-  // Customer pay and status pages and the Stripe webhook must work without a staff login.
-  const isPublic = onLogin || path.startsWith("/pay/") || path.startsWith("/status/") || path.startsWith("/api/stripe/");
+  // Customer pay and status pages, the Stripe webhook and the keep-alive job must work without a staff login.
+  const isPublic = onLogin || path.startsWith("/pay/") || path.startsWith("/status/") || path.startsWith("/api/stripe/") || path === "/api/keepalive";
 
   if (!user && !isPublic) return NextResponse.redirect(new URL("/login", request.url));
   if (user && onLogin) return NextResponse.redirect(new URL("/", request.url));
