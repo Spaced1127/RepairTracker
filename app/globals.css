@@ -1,0 +1,42 @@
+@import "tailwindcss";
+
+@theme {
+  --color-bench: #12151c;
+  --color-panel: #1a1e28;
+  --color-panel2: #222735;
+  --color-line: #2c3242;
+  --color-ink: #e8eaf0;
+  --color-mute: #8d95aa;
+  --color-solder: #f5b83d;
+  --color-danger: #ff6b6b;
+  --font-display: "Chakra Petch", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+}
+
+html { color-scheme: dark; }
+
+body {
+  background-color: var(--color-bench);
+  /* pegboard: a faint dot grid like the wall behind a workbench */
+  background-image: radial-gradient(#252a39 1.2px, transparent 1.2px);
+  background-size: 24px 24px;
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  min-height: 100dvh;
+}
+
+h1, h2, h3 { font-family: var(--font-display); letter-spacing: 0.01em; }
+
+:focus-visible { outline: 2px solid var(--color-solder); outline-offset: 2px; }
+
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; animation: none !important; }
+}
+
+@media print {
+  html { color-scheme: light; }
+  body { background: #fff !important; color: #000 !important; }
+  main { padding: 0 !important; max-width: none !important; }
+  .no-print { display: none !important; }
+}
