@@ -1,5 +1,4 @@
 -- Repair Bench: phase 1 schema
-create extension if not exists pgcrypto;
 
 create table public.statuses (
   id uuid primary key default gen_random_uuid(),

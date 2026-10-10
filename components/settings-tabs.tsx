@@ -1,10 +1,11 @@
 import Link from "next/link";
 import { cn } from "@/lib/util";
 
-export function SettingsTabs({ active }: { active: "statuses" | "notifications" }) {
+export function SettingsTabs({ active }: { active: "statuses" | "notifications" | "system" }) {
   const tabs = [
     { key: "statuses", href: "/settings/statuses", label: "Statuses" },
     { key: "notifications", href: "/settings/notifications", label: "Notifications" },
+    { key: "system", href: "/settings/system", label: "System" },
   ] as const;
   return (
     <div className="-mt-2 flex gap-1 border-b border-line">

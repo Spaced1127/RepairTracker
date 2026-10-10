@@ -3,6 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 import { Card, PageHeader } from "@/components/ui";
 import { accentFor, addDays, dayKey, deviceName, fmtDate, fmtDayKey, weekStartKey } from "@/lib/util";
 import { invoiceState, totals } from "@/lib/invoice";
+import { signupsOpen } from "@/lib/health";
 import { usd } from "@/lib/util";
 import type { Invoice, InvoiceItem, Part, Payment, Status, TicketFull } from "@/lib/types";
 
@@ -21,6 +22,7 @@ function Tile({ label, value, note }: { label: string; value: string | number; n
 
 export default async function Dashboard() {
   const supabase = await createClient();
+  const open_signups = await signupsOpen();
   const [{ data: st }, { data: tk }, { data: pr }, { data: iv }] = await Promise.all([
     supabase.from("statuses").select("*").order("position"),
     supabase.from("tickets").select("*, status:statuses(*), customer:customers(*), device:devices(*)")
@@ -66,6 +68,14 @@ export default async function Dashboard() {
 
   return (
     <>
+      {open_signups === true && (
+        <div role="alert" className="mb-5 rounded-xl border border-danger/50 bg-danger/10 p-4 text-sm">
+          <p className="font-semibold text-danger">Anyone can create an account on your database right now.</p>
+          <p className="mt-1 text-ink/90">
+            In Supabase, open Authentication, then Sign In / Providers, and turn off &quot;Allow new users to sign up&quot;. Until you do, new accounts can see your customers and tickets.
+          </p>
+        </div>
+      )}
       <PageHeader title="Dashboard">
         <p className="text-sm text-mute">{fmtDate(now.toISOString())}</p>
       </PageHeader>
